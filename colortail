@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Colors tail output for logging purposes
+debug_script=true
 
 ###### TABLE OF COLORS ##########
 
@@ -18,6 +19,9 @@ ColForLightRed=$'\e[91m'
 ColForLightGreen=$'\e[92m'
 ColForLightYellow=$'\e[93m'
 ColForLightBlue=$'\e[94m'
+ColForLightMagenta=$'\e[95m'
+ColForLightCyan=$'\e[96m'
+ColForWhite=$'\e[97m'
 
 ColBackDefault=$'\e[49m'
 ColBackBlack=$'\e[40m'
@@ -42,7 +46,7 @@ ColBackWhite=$'\e[107m'
 ########## DEFINE COLORS FOR LOGGING #########
 ##############################################
 
-debug_color="$ColForLightCyan"
+debug_color="$ColForCyan"
 info_color="$ColForDefault"
 warn_color="$ColForYellow"
 error_color="$ColForRed"
@@ -52,11 +56,15 @@ error_color="$ColForRed"
 
 ##### COMMAND WHICH ARE USED FOR SED
 
-debug_command="s:DEBUG:$debug_color&:"
-info_command="s:INFO:$info_color&:"
-warn_command="s:WARN:$warn_color&:"
-error_command="s:ERROR:$error_color&:"
+debug_command="s:DEBUG.*$:$debug_color& $ColForDefault:"
+info_command="s:INFO.*$:$info_color& $ColForDefault:"
+warn_command="s:WARN.*$:$warn_color& $ColForDefault:"
+error_command="s:ERROR.*$:$error_color& $ColForDefault:"
 
 ##### call command (tail piped to sed)
 
-tail "$@" | sed "$debug_command; $info_command; $warn_command; $error_command"
+if [[ ! $debug_script = true ]]; then
+	tail "$@" | sed "$debug_command; $info_command; $warn_command; $error_command"
+else
+	echo "$@" | sed "$debug_command; $info_command; $warn_command; $error_command"
+fi
