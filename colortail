@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Colors tail output for logging purposes
-debug_script=true
+debug_script=false
 
 ###### TABLE OF COLORS ##########
 
