@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Colors tail output for logging purposes
+
+###### TABLE OF COLORS ##########
+
+ColForDefault=$'\e[39m'
+ColForBlack=$'\e[30m'
+ColForRed=$'\e[31m'
+ColForGreen=$'\e[32m'
+ColForYellow=$'\e[33m'
+ColForBlue=$'\e[34m'
+ColForMagenta=$'\e[35m'
+ColForCyan=$'\e[36m'
+ColForLightGray=$'\e[37m'
+ColForDarkGray=$'\e[90m'
+ColForLightRed=$'\e[91m'
+ColForLightGreen=$'\e[92m'
+ColForLightYellow=$'\e[93m'
+ColForLightBlue=$'\e[94m'
+
+ColBackDefault=$'\e[49m'
+ColBackBlack=$'\e[40m'
+ColBackRed=$'\e[41m'
+ColBackGreen=$'\e[42m'
+ColBackYellow=$'\e[43m'
+ColBackBlue=$'\e[44m'
+ColBackMagenta=$'\e[45m'
+ColBackCyan=$'\e[46m'
+ColBackLightGray=$'\e[47m'
+ColBackDarkGray=$'\e[100m'
+ColBackLightRed=$'\e[101m'
+ColBackLightGreen=$'\e[102m'
+ColBackLightYellow=$'\e[103m'
+ColBackLightBlue=$'\e[104m'
+ColBackLightMagenta=$'\e[105m'
+ColBackLightCyan=$'\e[106m'
+ColBackWhite=$'\e[107m'
+
+############################################## START EDIT
+##############################################
+########## DEFINE COLORS FOR LOGGING #########
+##############################################
+
+debug_color="$ColForLightCyan"
+info_color="$ColForDefault"
+warn_color="$ColForYellow"
+error_color="$ColForRed"
+
+############################################# STOP EDIT
+#############################################
+
+##### COMMAND WHICH ARE USED FOR SED
+
+debug_command="s:DEBUG:$debug_color&:"
+info_command="s:INFO:$info_color&:"
+warn_command="s:WARN:$warn_color&:"
+error_command="s:ERROR:$error_color&:"
+
+##### call command (tail piped to sed)
+
+tail "$@" | sed "$debug_command; $info_command; $warn_command; $error_command"
