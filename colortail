@@ -46,7 +46,7 @@ ColBackWhite=$'\e[107m'
 ########## DEFINE COLORS FOR LOGGING #########
 ##############################################
 
-debug_color="$ColForCyan"
+debug_color="$ColForBlue"
 info_color="$ColForDefault"
 warn_color="$ColForYellow"
 error_color="$ColForRed"
