@@ -3,6 +3,7 @@
 # script to manage wildfly servers
 
 # variables
+COMMAND=""
 SERVER_NAME=""
 SERVER_TYPE="wildfly"
 SERVER_DIR="/home/plechowicz/Development/jbosses/"
@@ -11,19 +12,20 @@ SERVER_PATH=""
 # shows usage
 function show_help {
 cat << EOF
-usage: $0 {start|stop|log|restart|help} server_name [ server_type [ server_dir ]]
+usage: $0 server_name {start|stop|log|restart|help} [ server_type [ server_dir ]]
 EOF
 }
 
 # read variables from input arguments
 function read_variables {
-    if [ -z "$2" ]; then
+    if [ -z "$1" ]; then
 	    echo -e "\nerror: name of server must be provided\n"
 	    show_help
 	    exit 1
     fi
-    SERVER_NAME="$2"
+    SERVER_NAME="$1"
 
+    [[ ! -z "$2" ]] && COMMAND="$2";
     [[ ! -z "$3" ]] && SERVER_TYPE="$3";
     [[ ! -z "$4" ]] && SERVER_DIR="$4";
 
@@ -35,41 +37,37 @@ function print_variables {
     echo $1 $2 $3 $4
 }
 
-
 function start {
-    read_variables $@
     ${SERVER_PATH}bin/standalone.sh
 }
 
 function stop {
-    read_variables $@
     ${SERVER_PATH}bin/jboss-cli.sh --connect shutdown
 }
 
 function restart {
-    read_variables $@
     ${SERVER_PATH}bin/jboss-cli.sh --connect restart
 }
 
 function log {
-    read_variables $@
     ./colortail -f -n 50 "${SERVER_PATH}standalone/log/server.log"
 }
 
+read_variables $@
 
 #Main flow of the program
-case "$1" in
+case "$2" in
     start)
-        start $@
+        start
         ;;
     stop)
-        stop $@
+        stop
         ;;
     log)
-        log $@
+        log
         ;;
     restart)
-        restart $@
+        restart
         ;;
     help | h)
         show_help
