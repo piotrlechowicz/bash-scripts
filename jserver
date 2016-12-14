@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+
+# script to manage wildfly servers
+
+# variables
+SERVER_NAME=""
+SERVER_TYPE="wildfly"
+SERVER_DIR="/home/plechowicz/Development/jbosses/"
+SERVER_PATH=""
+
+# shows usage
+function show_help {
+cat << EOF
+usage: $0 {start|stop|log|restart|help} server_name [ server_type [ server_dir ]]
+EOF
+}
+
+# read variables from input arguments
+function read_variables {
+    if [ -z "$2" ]; then
+	    echo -e "\nerror: name of server must be provided\n"
+	    show_help
+	    exit 1
+    fi
+    SERVER_NAME="$2"
+
+    [[ ! -z "$3" ]] && SERVER_TYPE="$3";
+    [[ ! -z "$4" ]] && SERVER_DIR="$4";
+
+    SERVER_PATH="${SERVER_DIR}${SERVER_NAME}/${SERVER_TYPE}/"
+}
+
+# for debug purposes
+function print_variables {
+    echo $1 $2 $3 $4
+}
+
+
+function start {
+    read_variables $@
+    ${SERVER_PATH}bin/standalone.sh
+}
+
+function stop {
+    read_variables $@
+    ${SERVER_PATH}bin/jboss-cli.sh --connect shutdown
+}
+
+function restart {
+    read_variables $@
+    ${SERVER_PATH}bin/jboss-cli.sh --connect restart
+}
+
+function log {
+    read_variables $@
+    ./colortail -f -n 50 "${SERVER_PATH}standalone/log/server.log"
+}
+
+
+#Main flow of the program
+case "$1" in
+    start)
+        start $@
+        ;;
+    stop)
+        stop $@
+        ;;
+    log)
+        log $@
+        ;;
+    restart)
+        restart $@
+        ;;
+    help | h)
+        show_help
+        exit
+        ;;
+    *)
+        echo "Unrecognized command"
+        show_help
+        exit 1
+esac
