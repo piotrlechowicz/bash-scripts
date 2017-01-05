@@ -38,7 +38,7 @@ function print_variables {
 }
 
 function start {
-    ${SERVER_PATH}bin/standalone.sh
+    ${SERVER_PATH}bin/standalone.sh $5
 }
 
 function stop {
@@ -46,11 +46,12 @@ function stop {
 }
 
 function restart {
-    ${SERVER_PATH}bin/jboss-cli.sh --connect restart
+    stop
+    start
 }
 
 function log {
-    ./colortail -f -n 50 "${SERVER_PATH}standalone/log/server.log"
+    colortail -f -n 50 "${SERVER_PATH}standalone/log/server.log"
 }
 
 read_variables $@
