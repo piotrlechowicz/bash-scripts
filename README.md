@@ -40,6 +40,7 @@ List of scripts:
 * create-csv-from-bib
 * jserver
 * notify-to-file
+* bibtex-absolute-to-relative.sh
 
 Detailed list of scripts
 ---
@@ -141,6 +142,10 @@ That script prevents from such situation.
 
   To run that script after logging into gnome environment you can place it in `.gnomerc` file in your home directory. This file is automatically sourced when you logged into gnome session.
 
+  ```
+  /path/to/script/notify-to-file &
+  ```
+
   Another option is to put it into cron tab.
 
   To edit the cron tab type:
@@ -151,4 +156,22 @@ That script prevents from such situation.
   ```
   @reboot /path/to/script/notify-to-file
   ```
+</details>
+
+<details>
+  <summary>bibtex-absolute-to-relative.sh</summary><br>
+
+  Sanitizes bibtex file from absolute paths to relative ones. It is useful
+when docear or jabref reference manager is used.
+
+In bibtex file you add following line:
+  ```
+  @comment{jabref-meta: fileDirectory:&lt;path&gt;;}
+  ```
+
+  where `path` can reflect either relative or absolute path to pdf repository.
+
+  In such case `file` annotation in bibtex can use relative path only. The aim of 
+this script is to replace absolute paths created by assigning pdfs to references in docear,
+and replace them with relative ones. It allows for easier migration between computers.
 </details>
